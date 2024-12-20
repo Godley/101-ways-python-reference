@@ -1,4 +1,5 @@
-# Connect4
+# Connect4 reference
+This repo is intended to be an example implementation of a python version of the connect4 101ways interview repo. The original instructions are left below.
 ## Python setup
 ```
 brew install virtualenv python3
@@ -8,6 +9,23 @@ pip install -r requirements.txt
 pytest .
 ```
 
+## What this demonstrates
+- Type annotations
+- string formatting
+- standard lib functions used throughout
+- pytest usage, setup
+- functional programming
+- simple list comprehensions
+
+This isn't necessarily the cleanest code, there are probably easier ways to do everything - I would class this as a first pass.
+
+## What I haven't implemented
+- backwards diagonals (i.e those that start right to left, top to bottom rather than left to right top to bottom)
+- any of the bonus rounds
+
+
+
+## Original instructions
 Connect4 is a grid-based game, where players take it in turns to add
 tokens. The winner is whoever manages to line up 4 pieces, in any
 direction, first. Diagonals are allowed.

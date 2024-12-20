@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Optional
 
 def init_board(rows: int, cols: int) -> list:
     board = []
@@ -10,7 +10,7 @@ def init_board(rows: int, cols: int) -> list:
     return board
 
 
-def place_piece(player: str, row: int, col: int, board: list) -> list:
+def place_piece(player: str, row: int, col: int, board: list) -> Optional[list]:
     if row >= len(board):
         return None
     if col >= len(board[row]):
@@ -21,7 +21,8 @@ def place_piece(player: str, row: int, col: int, board: list) -> list:
     return board
 
 
-def check_sequence(seq: list) -> str:
+def check_sequence(seq: list) -> Optional[str]:
+    
     result = "".join(seq).find("xxxx")
     if result == -1:
         o_result = "".join(seq).find("oooo")
@@ -60,23 +61,19 @@ def get_col_diag_indexes(row: list, row_index: int, grid_height: int, connect_le
     return row_indices_x, row_indices_o, diag_indices_x, diag_indices_o
 
 
-def check_col(board: list, row_index: int, connect_length: int) -> str:
+def check_col_diag(board: list, row_index: int, connect_length: int) -> str:
     x_indices, o_indices, x_diag, o_diag = get_col_diag_indexes(board[row_index], row_index, len(board), connect_length)
     print(x_diag)
     word = []
     diag_word = []
     if len(x_indices) >= connect_length:
-        for coord in x_indices:
-            word.append(board[coord[0]][coord[1]])
+        word = [board[row][col] for row, col in x_indices]
     if len(o_indices) >= connect_length:
-        for coord in o_indices:
-            word.append(board[coord[0]][coord[1]])
+        word += [board[row][col] for row, col in o_indices]
     if len(x_diag) >= connect_length:
-        for coord in x_diag:
-            diag_word.append(board[coord[0]][coord[1]])
+        diag_word = [board[row][col] for row, col in x_diag]
     if len(o_diag) >= connect_length:
-        for coord in o_diag:
-            diag_word.append(board[coord[0]][coord[1]])
+        diag_word += [board[row][col] for row, col in o_diag]
     col = check_sequence(word)
     diag = check_sequence(diag_word)
     return col or diag
@@ -86,12 +83,12 @@ def check_winner(board: list) -> str:
         result = check_sequence(row)
         if result is not None:
             return result
-        col_result = check_col(board, i, 4)
+        col_result = check_col_diag(board, i, 4)
         if col_result is not None:
             return col_result
 
 
-def play(board: list, player: str, row: int, col: int):
+def play(board: list, player: str, row: int, col: int) -> Optional[str]:
     updated = place_piece(player, row, col, board)
     winner = check_winner(updated)
     if winner:
@@ -105,6 +102,6 @@ def main():
     session = init_board()
 
 
-
+# I've mainly tested this through unit tests in test_connect4, but you could use this section to implement a terminal-based gameplay
 if __name__ == '__main__':
     main()
